@@ -1,4 +1,4 @@
-package com.example.infoday
+package com.example.infoday//package com.example.infoday
 
 //import androidx.compose.foundation.lazy.LazyColumn
 //import androidx.compose.foundation.lazy.items

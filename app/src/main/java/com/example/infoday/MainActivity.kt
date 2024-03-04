@@ -147,7 +147,8 @@ fun ScaffoldScreen() {
                 title = { Text("HKBU InfoDay App!") }
             )
         },
-        bottomBar = {NavigationBar {
+        bottomBar = {
+            NavigationBar {
             items.forEachIndexed { index, item ->
 //                NavigationBarItem(
 //                    icon = { Icon(Icons.Filled.Favorite, contentDescription = item) },
@@ -199,7 +200,7 @@ fun ScaffoldScreen() {
                     navController = navController,
                     startDestination = "home",
                 ) {
-//                    composable("home") { DeptScreen(navController) }
+                    composable("home") { DeptScreen(navController) }
 //                    composable("home") { FeedScreen(feeds) }
                     composable("events") { DeptScreen(navController) }
                     composable("event/{deptId}") { backStackEntry ->

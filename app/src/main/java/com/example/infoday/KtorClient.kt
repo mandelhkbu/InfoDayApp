@@ -1,4 +1,4 @@
-package com.example.infoday//package com.example.infoday
+package com.example.infoday//package com.example.infoday//package com.example.infoday
 //
 //import Feed
 //import com.example.infoday.KtorClient.httpClient
