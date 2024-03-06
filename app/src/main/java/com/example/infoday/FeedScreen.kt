@@ -10,6 +10,8 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,11 +25,14 @@ data class Feed(val id: Int, val image: String, val title: String, val detail: S
                 123, "https://cdn.stocksnap.io/img-thumbs/960w/philadelphia-travel_LPDQBLM2A0.jpg", " COMP ", " discount "
             ),
         )
+
     }
 }
 
+
 @Composable
 fun FeedScreen(feeds: List<Feed>) {
+
     LazyColumn {
         items(feeds) { feed ->
             Text(feed.title)
@@ -39,8 +44,15 @@ fun FeedScreen(feeds: List<Feed>) {
 @Preview(showBackground = true)
 @Composable
 fun FeedPreview() {
+    val feeds by produceState(
+        initialValue = listOf<Feed>(),
+        producer = {
+            value = KtorClient.getFeeds()
+        }
+    )
     InfoDayTheme {
-        FeedScreen(Feed.data)
+//        FeedScreen(Feed.data)
+        FeedScreen(feeds)
     }
 }
 
