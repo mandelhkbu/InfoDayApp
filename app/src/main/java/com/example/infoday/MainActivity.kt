@@ -1,6 +1,8 @@
 package com.example.infoday
 
 import DeptScreen
+import Feed
+import FeedScreen
 //import Feed
 //import FeedScreen
 import InfoScreen
@@ -134,12 +136,12 @@ fun ScaffoldScreen() {
     val items = listOf("Home", "Events", "Itin", "Map", "Info")
     val navController = rememberNavController()
 
-//    val feeds by produceState(
-//        initialValue = listOf<Feed>(),
-//        producer = {
-//            value = KtorClient.getFeeds()
-//        }
-//    )
+    val feeds by produceState(
+        initialValue = listOf<Feed>(),
+        producer = {
+            value = KtorClient.getFeeds()
+        }
+    )
 
     Scaffold(
         topBar = {
@@ -200,8 +202,9 @@ fun ScaffoldScreen() {
                     navController = navController,
                     startDestination = "home",
                 ) {
-                    composable("home") { DeptScreen(navController) }
-//                    composable("home") { FeedScreen(feeds) }
+//                    composable("home") { DeptScreen(navController) }
+                    composable("home") { FeedScreen(feeds) }
+
                     composable("events") { DeptScreen(navController) }
                     composable("event/{deptId}") { backStackEntry ->
                         EventScreen(backStackEntry.arguments?.getString("deptId"))
