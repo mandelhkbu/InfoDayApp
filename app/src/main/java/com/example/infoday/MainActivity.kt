@@ -21,16 +21,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -42,16 +46,35 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            InfoDayTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-//                    Greeting("Android")
-                    ScaffoldScreen()
+//        setContent {
+//
+//            InfoDayTheme {
+//                // A surface container using the 'background' color from the theme
+//                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+////                    Greeting("Android")
+//                    ScaffoldScreen()
+//
+//                }
+//            }
+//        }
 
+        setContent {
+
+            val dataStore = UserPreferences(LocalContext.current)
+            val mode by dataStore.getMode.collectAsState(initial = false)
+
+            InfoDayTheme(darkTheme = mode ?: false) {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+//            Greeting("Android")
+                    ScaffoldScreen()
                 }
             }
         }
+
     }
 
 
@@ -135,6 +158,7 @@ fun ScaffoldScreen() {
     var selectedItem by remember { mutableIntStateOf(0) }
     val items = listOf("Home", "Events", "Itin", "Map", "Info")
     val navController = rememberNavController()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     val feeds by produceState(
         initialValue = listOf<Feed>(),
@@ -144,6 +168,7 @@ fun ScaffoldScreen() {
     )
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text("HKBU InfoDay App!") }
@@ -206,8 +231,11 @@ fun ScaffoldScreen() {
                     composable("home") { FeedScreen(feeds) }
 
                     composable("events") { DeptScreen(navController) }
+//                    composable("event/{deptId}") { backStackEntry ->
+//                        EventScreen(backStackEntry.arguments?.getString("deptId"))
+//                    }
                     composable("event/{deptId}") { backStackEntry ->
-                        EventScreen(backStackEntry.arguments?.getString("deptId"))
+                        EventScreen(snackbarHostState, backStackEntry.arguments?.getString("deptId"))
                     }
                     composable("itin") { InfoScreen(0) }
                     composable("map") { MapScreen() }
