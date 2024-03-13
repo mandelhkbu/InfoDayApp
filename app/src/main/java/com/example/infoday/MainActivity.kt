@@ -237,7 +237,7 @@ fun ScaffoldScreen() {
                     composable("event/{deptId}") { backStackEntry ->
                         EventScreen(snackbarHostState, backStackEntry.arguments?.getString("deptId"))
                     }
-                    composable("itin") { InfoScreen(0) }
+                    composable("itin") { ItineraryScreen(snackbarHostState) }
                     composable("map") { MapScreen() }
                     composable("info") { InfoScreen(1) }
                 }
