@@ -89,6 +89,6 @@ dependencies {
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.3")
-
+    implementation("io.coil-kt:coil-compose:2.2.2")
 
 }
