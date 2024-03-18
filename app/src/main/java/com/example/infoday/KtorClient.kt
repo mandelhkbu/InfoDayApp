@@ -9,14 +9,21 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 
 object KtorClient {
+    private var token: String = ""
+
     val httpClient = HttpClient {
         install(ContentNegotiation) {
             json() // enable the client to perform JSON serialization
         }
         install(Logging)
+//        defaultRequest {
+//            contentType(ContentType.Application.Json)
+//            accept(ContentType.Application.Json)
+//        }
         defaultRequest {
             contentType(ContentType.Application.Json)
             accept(ContentType.Application.Json)
+            header("Authorization", "Bearer $token")
         }
         expectSuccess = true
     }
@@ -35,5 +42,31 @@ object KtorClient {
                 )
             )
         }
+    }
+
+//    suspend fun postFeedback(feedback: String): String {
+//        return httpClient.post("https://httpbin.org/post") {
+//            setBody(feedback)
+//        }.body()
+//    }
+
+//    suspend fun postFeedback(feedback: String): String {
+//
+//        val response: HttpBinResponse = httpClient.post("https://httpbin.org/post") {
+//            setBody(feedback)
+//        }.body()
+//
+//        return response.headers["X-Amzn-Trace-Id"].toString()
+//    }
+
+    suspend fun postFeedback(feedback: String): String {
+
+        val response: HttpBinResponse = httpClient.post("https://httpbin.org/post") {
+            setBody(feedback)
+        }.body()
+
+        token = response.headers["X-Amzn-Trace-Id"].toString()
+        println(token)
+        return response.toString()
     }
 }

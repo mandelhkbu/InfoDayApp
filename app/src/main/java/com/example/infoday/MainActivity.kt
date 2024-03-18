@@ -7,6 +7,8 @@ import FeedScreen
 //import FeedScreen
 import InfoScreen
 import MapScreen
+import UserPreferences
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -35,12 +37,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.infoday.ui.theme.InfoDayTheme
+
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore("settings")
 
 class MainActivity : ComponentActivity() {
 
@@ -60,8 +68,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-            val dataStore = UserPreferences(LocalContext.current)
-            val mode by dataStore.getMode.collectAsState(initial = false)
+//            val dataStore = UserPreferences(LocalContext.current)
+//            val mode by dataStore.getMode.collectAsState(initial = false)
+            val userPreferences = UserPreferences.getInstance(dataStore)
+            val mode by userPreferences.getMode.collectAsState(initial = false)
+
 
             InfoDayTheme(darkTheme = mode ?: false) {
                 // A surface container using the 'background' color from the theme
@@ -185,6 +196,8 @@ fun ScaffoldScreen() {
 //                )
                 NavigationBarItem(
                     icon = { Icon(Icons.Filled.Favorite, contentDescription = item) },
+                    modifier = Modifier.testTag(item),
+
                     label = { Text(item) },
                     selected = selectedItem == index,
                     onClick = {
@@ -239,7 +252,7 @@ fun ScaffoldScreen() {
                     }
                     composable("itin") { ItineraryScreen(snackbarHostState) }
                     composable("map") { MapScreen() }
-                    composable("info") { InfoScreen(1) }
+                    composable("info") { InfoScreen(snackbarHostState) }
                 }
             }
         }

@@ -1,17 +1,30 @@
 package com.example.infoday
 
-import org.junit.Test
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Rule
+import org.junit.runner.RunWith
 
-import org.junit.Assert.*
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleUnitTest {
+@RunWith(AndroidJUnit4::class)
+class MyUiTest {
+    @get:Rule
+    val composeTestRule = createComposeRule()
+
+
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun verifyMindDriveIsSavedAndDisplayed() {
+
+        // Set the content of the screen
+        composeTestRule.setContent {
+            ScaffoldScreen()
+        }
+
+        // Perform UI interactions and assertions
+        composeTestRule.onNodeWithText("Events").assertIsDisplayed().performClick()
+        composeTestRule.onNodeWithText("Comp", substring = true).assertIsDisplayed().performClick()
+        composeTestRule.onNodeWithText("MindDrive", substring = true).assertIsDisplayed()
+            .performTouchInput { longClick() }
+        composeTestRule.onNodeWithText("Itin").performClick()
+        composeTestRule.onNodeWithText("MindDrive", substring = true).assertIsDisplayed()
     }
 }
