@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.infoday.R
+import com.example.infoday.dataStore
 import com.example.infoday.ui.theme.InfoDayTheme
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
